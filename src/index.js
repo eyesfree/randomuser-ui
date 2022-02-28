@@ -15,7 +15,7 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 function getCountriesFromList(users) {
     let updatedCountries = [];
     updatedCountries.concat(users.slice());
-    users.map(user => {
+    users.forEach(user => {
         if (!updatedCountries?.includes(user.location.country)) {
             updatedCountries.push(user.location.country);
         }
@@ -28,6 +28,7 @@ function getUsersForCountries(users, value) {
     return filteredEvents;
 }
 
+const backendUrl = "https://randomuser-connector.azurewebsites.net/randomusers/users";
 function UsersComponent() {
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
@@ -41,7 +42,7 @@ function UsersComponent() {
         if (refresh) {
             console.log('refreshing');
             setIsLoaded(false);
-            fetch("http://localhost:8080/randomusers/users")
+            fetch(backendUrl)
                 .then(res => res.json())
                 .then(
                     (result) => {
@@ -59,7 +60,7 @@ function UsersComponent() {
                     }
                 )
         }
-    }, [refresh])
+    }, [refresh, items, value])
 
     if (error) {
         return <div>Error: {error.message}</div>;
@@ -94,18 +95,22 @@ function UsersComponent() {
                         itemCount={usersInCountry.length > 0 ? usersInCountry.length : items.length}
                         overscanCount={10}
                     >
-                        {({ index, style }) => {
-                            let item = usersInCountry[index] ? usersInCountry[index] : items[index];
-                            return (
-                                <ListItem style={style} key={index} disablePadding>
-                                    <ListItemText primary={`${item.name.title} ${item.name.first} ${item.name.last} ${item.gender} ${item.email} `} />
-                                </ListItem>
-                            );
-                        }}
+                        {renderUser()}
                     </FixedSizeList>
                 </Box>
             </div>
         );
+    }
+
+    function renderUser() {
+        return ({ index, style }) => {
+            let item = usersInCountry[index] ? usersInCountry[index] : items[index];
+            return (
+                <ListItem style={style} key={index} disablePadding>
+                    <ListItemText primary={`${item.name.title} ${item.name.first} ${item.name.last} ${item.gender} ${item.email} `} />
+                </ListItem>
+            );
+        };
     }
 }
 
