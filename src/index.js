@@ -72,9 +72,10 @@ function UsersComponent() {
                     options={countries}
                     style={{ width: 300 }}
                     value={value}
-                    onChange={(newValue) => {
+                    onChange={(event, newValue) => {
                         setValue(newValue);
                         setUsersInCountry(getUsersForCountries(items, newValue));
+                        setRefresh(false);
                     }}
                     renderInput={(params) =>
                         <TextField {...params} label="Countries" variant="outlined" />}
@@ -91,12 +92,12 @@ function UsersComponent() {
                         width={700}
                         itemSize={46}
                         itemCount={usersInCountry.length > 0 ? usersInCountry.length : items.length}
-                        overscanCount={20}
+                        overscanCount={10}
                     >
-                        {({ index }) => {
+                        {({ index, style }) => {
                             let item = usersInCountry[index] ? usersInCountry[index] : items[index];
                             return (
-                                <ListItem key={index} disablePadding>
+                                <ListItem style={style} key={index} disablePadding>
                                     <ListItemText primary={`${item.name.title} ${item.name.first} ${item.name.last} ${item.gender} ${item.email} `} />
                                 </ListItem>
                             );
