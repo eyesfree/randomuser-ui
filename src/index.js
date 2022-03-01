@@ -28,8 +28,8 @@ function getUsersForCountries(users, value) {
     return filteredEvents;
 }
 
-//const backendUrl = "https://randomuser-connector.azurewebsites.net/randomusers/users";
-const backendUrl = "http://localhost:8080/randomusers/users";
+const backendUrl = "https://randomuser-connector.azurewebsites.net/randomusers/users";
+//const backendUrl = "http://localhost:8080/randomusers/users";
 function UsersComponent() {
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
